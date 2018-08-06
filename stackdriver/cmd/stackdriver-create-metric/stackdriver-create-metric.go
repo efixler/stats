@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"github.com/efixler/taxat/stats/stackdriver"
+	"github.com/efixler/stats/stackdriver"
 )
 
 const (

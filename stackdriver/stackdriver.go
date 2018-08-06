@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 	"github.com/efixler/multierror"
-	"github.com/efixler/taxat/stats"
+	"github.com/efixler/stats"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/monitoring/v3"
 )
@@ -240,7 +240,7 @@ func getClient(ctx context.Context) (*monitoring.Service, error) {
 
 // Write all of the supplied counters to the data store. Implements the Sink interface 
 func (ss *sink) WriteCounters(ctx context.Context, counters ...*stats.Counter) error {
-	me := make(taxat.MultiError,0)
+	me := make(multierror.MultiError,0)
 	for _, counter := range counters {
 		if err := IncrementCounter(ctx, counter.Name(), counter.Data()); err != nil {
 			me = append(me, err)
@@ -254,7 +254,7 @@ func (ss *sink) WriteCounters(ctx context.Context, counters ...*stats.Counter) e
 
 // Write all of the supplied timers to the data store. Implements the Sink interface 
 func (ss *sink) WriteTimers(ctx context.Context, timers ...*stats.Timer) error {
-	me := make(taxat.MultiError,0)
+	me := make(multierror.MultiError,0)
 	for _, timer := range timers {
 		if err := WriteTimeSeries(ctx, timer.Name(), timer.Milliseconds()); err != nil {
 			me = append(me, err)

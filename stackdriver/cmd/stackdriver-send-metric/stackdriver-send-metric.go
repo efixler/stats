@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 	"strconv"
-	"github.com/efixler/taxat/stats/stackdriver"
+	"github.com/efixler/stats/stackdriver"
 )
 
 const (
