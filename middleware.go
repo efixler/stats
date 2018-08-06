@@ -53,7 +53,19 @@ func TimeRequests(next http.Handler) http.Handler {
 // Increment the counter with the named bucket. Counters can be incremented
 // multiple times within a request. The counter will get flushed when the request
 // is finished.
+//
+//
+// Metric buckets are created on demand. Metric names can have alphanumeric characters, 
+// slashes, underscores, and dots.
+//
+// 
+//  func addUserHandler(w http.ResponseWriter, r *http.Request) {
+//    ...
+//    err := stats.Increment(r.Context(), "add_user")
+//    ...
+//  }
 // Errors returned here will generally be IllegalMetricName or RequestMetricsNotInitted.
+// Errors relating to the backend will not be reported here, as events 
 func Increment(ctx context.Context, bucket string) error {
 	ctxMetrics, ok := statsFromContext(ctx)
 	if !ok {
@@ -62,7 +74,7 @@ func Increment(ctx context.Context, bucket string) error {
 	c, ok := ctxMetrics.counters[bucket]
 	if !ok {
 		var err error
-		c, err = NewCounter(bucket)
+		c, err = newCounter(bucket)
 		if err != nil {
 			return err
 		}
@@ -72,14 +84,23 @@ func Increment(ctx context.Context, bucket string) error {
 	return nil
 }
 
-// Starts a timer with the named bucket.
+// Starts a timer with the named bucket. Named buckets are created on demand, and can contain alphanumeric
+// characters, slashes, underscores, and dots.
+//
+//  func newUserHandler(w http.ResponseWriter, r *http.Request) {
+//      timerName := "new_user_time"
+//		err := stats.StartTimer(r.Context(), timerName)
+//      //... do work in here
+//      err := stats.FinishTimer(r.Context(), timerName)
+//  }
+//
 // Errors returned here will generally be IllegalMetricName or RequestMetricsNotInitted.
 func StartTimer(ctx context.Context, bucket string) error {
 	ctxMetrics, ok := statsFromContext(ctx)
 	if !ok {
 		return RequestMetricsNotInitted
 	}
-	if t, err := NewTimer(bucket); err != nil {
+	if t, err := newTimer(bucket); err != nil {
 		return err
 	} else {
 		ctxMetrics.timers[bucket] = t
@@ -88,8 +109,8 @@ func StartTimer(ctx context.Context, bucket string) error {
 
 }
 
-// Finish the specified timer. This timer will be forwarded to the Sink (and thus onto the data store),
-// if one has been set up.
+// Finish the timer specified by bucket. 
+// The finished  timer will be forwarded to the Sink, if one has been set up.
 func FinishTimer(ctx context.Context, bucket string) error {
 	ctxMetrics, ok := statsFromContext(ctx)
 	if !ok {

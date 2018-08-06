@@ -38,6 +38,8 @@ const (
 	msRnd       = n2ms / 2
 )
 
+// Core interface for all metrics. This interface is public primarily for access by Sink implementations.
+// It is not used directly by stats event producers.
 type Metric interface {
 	Name() string
 	Data() int
@@ -56,6 +58,8 @@ func (m *metric) Data() int { // this should maybe be an int64
 	return m.data
 }
 
+// Counter metric. This interface is public primarily for access by Sink implementations.
+// It is not used directly by stats event producers.
 type Counter struct {
 	*metric
 }
@@ -68,6 +72,8 @@ func (c *Counter) Decrement() {
 	c.data--
 }
 
+// Timer metric. This interface is public primarily for access by Sink implementations.
+// It is not used directly by stats event producers.
 type Timer struct {
 	*metric
 	startTime int64
@@ -91,7 +97,7 @@ func (t *Timer) String() string {
 	return fmt.Sprintf("T%s: %s", t.name, time.Duration(int64(t.data)))
 }
 
-func NewCounter(bucket string) (*Counter, error) {
+func newCounter(bucket string) (*Counter, error) {
 	if err := checkMetricName(bucket); err != nil {
 		return nil, err
 	}
@@ -99,7 +105,7 @@ func NewCounter(bucket string) (*Counter, error) {
 	return c, nil
 }
 
-func NewTimer(bucket string) (*Timer, error) {
+func newTimer(bucket string) (*Timer, error) {
 	if err := checkMetricName(bucket); err != nil {
 		return nil, err
 	}
