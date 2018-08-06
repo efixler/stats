@@ -55,17 +55,17 @@ func TimeRequests(next http.Handler) http.Handler {
 // is finished.
 //
 //
-// Metric buckets are created on demand. Metric names can have alphanumeric characters, 
+// Metric buckets are created on demand. Metric names can have alphanumeric characters,
 // slashes, underscores, and dots.
 //
-// 
+//
 //  func addUserHandler(w http.ResponseWriter, r *http.Request) {
 //    ...
 //    err := stats.Increment(r.Context(), "add_user")
 //    ...
 //  }
 // Errors returned here will generally be IllegalMetricName or RequestMetricsNotInitted.
-// Errors relating to the backend will not be reported here, as events 
+// Errors relating to the backend will not be reported here, as events
 func Increment(ctx context.Context, bucket string) error {
 	ctxMetrics, ok := statsFromContext(ctx)
 	if !ok {
@@ -109,7 +109,7 @@ func StartTimer(ctx context.Context, bucket string) error {
 
 }
 
-// Finish the timer specified by bucket. 
+// Finish the timer specified by bucket.
 // The finished  timer will be forwarded to the Sink, if one has been set up.
 func FinishTimer(ctx context.Context, bucket string) error {
 	ctxMetrics, ok := statsFromContext(ctx)
