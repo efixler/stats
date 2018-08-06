@@ -7,6 +7,7 @@ import (
 	"errors"
 	"strings"
 	"time"
+	"github.com/efixler/config"
 	"github.com/efixler/multierror"
 	"github.com/efixler/stats"
 	"golang.org/x/oauth2/google"
@@ -27,8 +28,9 @@ type sink struct {
 	windowSeconds 	int64
 }
 
+// NB: will panic if config is unset
 var Sink = &sink{
-	projectId: "arctic-anvil-180318", //mark 
+	projectId: config.Default().MustGet("GOOGLE_CLOUD_PROJECT"),
 	windowSeconds: defaultWindowSeconds, 
 } 
 
