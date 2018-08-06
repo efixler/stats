@@ -20,9 +20,9 @@ and also assumes Gorilla Mux.
 
 ````
 import (
-	"github.com/gorilla/mux"
+  "github.com/gorilla/mux"
   "github.com/efixler/taxat/stats"
-	"github.com/efixler/taxat/stats/stackdriver"
+  "github.com/efixler/taxat/stats/stackdriver"
 )
 
 func init() {
