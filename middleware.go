@@ -1,9 +1,11 @@
 package stats
 
+// This file contains the key public APIs for the stats package.
+
 import (
 	"context"
-	"github.com/efixler/multierror"
 	"github.com/efixler/logger"
+	"github.com/efixler/multierror"
 	"net/http"
 	"strings"
 )
@@ -39,7 +41,7 @@ func initRequestContext(ctx context.Context, rc *requestStats, sink Sink) contex
 }
 
 // Time every http request on this server. In many environments, this will be superfluous, and is
-// provided mainly for testing. If you use this, always make the call after Use(Metrics(sink))
+// provided mainly for testing. If you use this, always make this setup call after Use(Metrics(sink))
 func TimeRequests(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tPath := strings.Join([]string{strings.Trim(r.URL.Path, "/"), r.Method}, ".")
@@ -50,8 +52,8 @@ func TimeRequests(next http.Handler) http.Handler {
 
 // Increment the counter with the named bucket. Counters can be incremented
 // multiple times within a request. The counter will get flushed when the request
-// is done.
-// Errors returned here will generally be IllegalMetricName.
+// is finished.
+// Errors returned here will generally be IllegalMetricName or RequestMetricsNotInitted.
 func Increment(ctx context.Context, bucket string) error {
 	ctxMetrics, ok := statsFromContext(ctx)
 	if !ok {
@@ -71,7 +73,7 @@ func Increment(ctx context.Context, bucket string) error {
 }
 
 // Starts a timer with the named bucket.
-// Errors returned here will generally be IllegalMetricName.
+// Errors returned here will generally be IllegalMetricName or RequestMetricsNotInitted.
 func StartTimer(ctx context.Context, bucket string) error {
 	ctxMetrics, ok := statsFromContext(ctx)
 	if !ok {

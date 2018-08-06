@@ -9,11 +9,11 @@ func TestMetricsInitted(t *testing.T) {
 	ctx := context.Background()
 	bucket := "my/test/metric"
 	if err := Increment(ctx, bucket); err != RequestMetricsNotInitted {
-		t.Error("Expected error %s, got %v", RequestMetricsNotInitted, err)
+		t.Errorf("Expected error %s, got %v", RequestMetricsNotInitted, err)
 	}
 	ctx = requestContextUsingMetrics()
 	if err := Increment(ctx, bucket); err != nil {
-		t.Error("Expected no error, got %v", err)
+		t.Errorf("Expected no error, got %v", err)
 	}
 }
 
@@ -33,7 +33,7 @@ func TestNames(t *testing.T) {
 	for _, test := range nameChecks {
 		err := Increment(ctx, test.name)
 		if err != test.err {
-			t.Error("Test metric name %s: expected %v, got %v", test.name, test.err, err)
+			t.Errorf("Test metric name %s: expected %v, got %v", test.name, test.err, err)
 			continue
 		}
 	}
