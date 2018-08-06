@@ -89,7 +89,7 @@ func Increment(ctx context.Context, bucket string) error {
 //
 //  func newUserHandler(w http.ResponseWriter, r *http.Request) {
 //      timerName := "new_user_time"
-//		err := stats.StartTimer(r.Context(), timerName)
+//      err := stats.StartTimer(r.Context(), timerName)
 //      //... do work in here
 //      err := stats.FinishTimer(r.Context(), timerName)
 //  }
