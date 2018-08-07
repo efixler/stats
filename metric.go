@@ -5,8 +5,8 @@
 // APIs are developed and tested around gorilla mux, but should work with any middleware
 // API that accepts http.Handler implementations.
 //
-// stats pushes data upstream using a background goroutine. Background processing is also
-// supported in the Appengine Standard Environment, but in all scaling modes. See
+// stats pushes data upstream using a background goroutine. Background processing is
+// supported in the Appengine Standard Environment, but not in all scaling modes. See
 // https://cloud.google.com/appengine/docs/standard/go/modules/runtime#RunInBackground
 // for more information about background activities and scaling modes in Appengine.
 //
